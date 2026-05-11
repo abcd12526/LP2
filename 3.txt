@@ -24,7 +24,9 @@ public class Greedy {
                 if (g[u][v]!=0 && !vis[v] && dist[u]+g[u][v] < dist[v]) {
                     dist[v] = dist[u]+g[u][v]; pq.add(new int[]{v, dist[v]});
                 }
-            System.out.println("       -> "+Arrays.toString(dist));
+            String[] display = new String[n];
+            for (int i = 0; i < n; i++) display[i] = dist[i]==Integer.MAX_VALUE ? "-" : String.valueOf(dist[i]);
+            System.out.println("       -> "+Arrays.toString(display));
         }
         System.out.println("Dijkstra SSSP from "+src+": "+Arrays.toString(dist));
     }
