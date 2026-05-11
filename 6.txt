@@ -1,6 +1,5 @@
 06 - Installation and Configure Google App Engine
 
-
 STEP 1 - INSTALL PYTHON 2.7.9
 Go to https://www.python.org/downloads/
 Download python-2.7.9.amd64.msi
@@ -13,6 +12,9 @@ Go to https://cloud.google.com/sdk/docs/install - > Google Cloud CLI Installer
 Download and run the Windows installer
 Follow the setup wizard and click Finish
 It will open Google Cloud SDK Shell
+or 
+https://docs.cloud.google.com/sdk/docs/install-sdk#deb
+for the steps
 
 
 STEP 3 - LOGIN AND CONFIGURE
