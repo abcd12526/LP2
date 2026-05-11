@@ -1,20 +1,133 @@
 import java.util.*;
+
 public class Main {
     static int[][] G={{1,2,3},{4,5,6},{7,8,0}};
 
     static int h(int[][] b){
         int d=0;
-        for(int i=0;i<3;i++) for(int j=0;j<3;j++)
+        for(int i=0;i<3;i++)
+            for(int j=0;j<3;j++)
+                if(b[i][j]!=0){
+                    int v=b[i][j]-1;
+                    d+=Math.abs(i-v/3)+Math.abs(j-v%3);
+                }
+        return d;
+    }
+
+    static String k(int[][] a){
+        return Arrays.deepToString(a);
+    }
+
+    static List<int[][]> moves(int[][] b){
+        List<int[][]> L=new ArrayList<>();
+
+        int x=0,y=0;
+
+        for(int i=0;i<3;i++)
+            for(int j=0;j<3;j++)
+                if(b[i][j]==0){
+                    x=i;
+                    y=j;
+                }
+
+        int[][] D={{1,0},{-1,0},{0,1},{0,-1}};
+
+        for(int[] t:D){
+            int nx=x+t[0], ny=y+t[1];
+
+            if(nx>=0&&ny>=0&&nx<3&&ny<3){
+
+                int[][] c=new int[3][3];
+
+                for(int i=0;i<3;i++)
+                    for(int j=0;j<3;j++)
+                        c[i][j]=b[i][j];
+
+                c[x][y]=c[nx][ny];
+                c[nx][ny]=0;
+
+                L.add(c);
+            }
+        }
+
+        return L;
+    }
+
+    public static void main(String[] a){
+
+        int[][] S={{1,2,3},{4,0,6},{7,5,8}};
+
+        PriorityQueue<int[][]> pq=
+            new PriorityQueue<>(Comparator.comparingInt(Main::h));
+
+        Map<String,int[][]> P=new HashMap<>();
+
+        Set<String> V=new HashSet<>();
+
+        pq.add(S);
+
+        P.put(k(S), null);
+
+        while(!pq.isEmpty()){
+
+            int[][] cur=pq.poll();
+
+            if(k(cur).equals(k(G))){
+
+                List<int[][]> path=new ArrayList<>();
+
+                while(cur!=null){
+                    path.add(cur);
+                    cur=P.get(k(cur));
+                }
+
+                Collections.reverse(path);
+
+                for(int[][] s:path){
+
+                    for(int[] r:s){
+
+                        for(int v:r)
+                            System.out.print(v+" ");
+
+                        System.out.println();
+                    }
+
+                    System.out.println();
+                }
+
+                return;
+            }
+
+            V.add(k(cur));
+
+            for(int[][] nx:moves(cur))
+
+                if(!V.contains(k(nx))){
+                    P.put(k(nx),cur);
+                    pq.add(nx);
+                }
+        }
+    }
+}
+
+/*import java.util.*;
+public class Main {
+    static int[][] G={{1,2,3},{4,5,6},{7,8,0}};
+
+    static int h(int[][] b){
+        int d=0;
+        for(int i=0;i<3;i++) for(int j=0;j<3;j++) //through row and coloumns
             if(b[i][j]!=0){
                 int v=b[i][j]-1;
-                d+=Math.abs(i-v/3)+Math.abs(j-v%3);
+                d+=Math.abs(i-v/3)+Math.abs(j-v%3); //Manhattan distance
             }
         return d;
     }
 
     static String k(int[][] a){ return Arrays.deepToString(a); }
 
-    static List<int[][]> moves(int[][] b){
+    static List<int[][]> moves(int[][] b){  //Generate possible next states
         List<int[][]> L=new ArrayList<>();
         int x=0,y=0;
         for(int i=0;i<3;i++) for(int j=0;j<3;j++) if(b[i][j]==0){x=i;y=j;}
@@ -52,7 +165,6 @@ public class Main {
     }
 }
 
-/*
 static int[][] G – defines the goal state of the 8-puzzle where tiles are arranged in correct order and 0 represents the blank tile
 static int h(int[][] b) – heuristic function that calculates Manhattan distance for all tiles from their correct positions and returns total distance used to guide search
 static String k(int[][] a) – converts the 2D board into a string format so it can be stored and compared in HashMap and HashSet
