@@ -1,0 +1,60 @@
+06 - Installation and Configure Google App Engine
+
+
+STEP 1 - INSTALL PYTHON 2.7.9
+Go to https://www.python.org/downloads/
+Download python-2.7.9.amd64.msi
+Run installer, default path: C:\Python27\
+
+
+STEP 2 - INSTALL GOOGLE APP ENGINE SDK
+python -> gcloud cli-> gcloud cl install
+Go to https://cloud.google.com/sdk/docs/install - > Google Cloud CLI Installer
+Download and run the Windows installer
+Follow the setup wizard and click Finish
+It will open Google Cloud SDK Shell
+
+
+STEP 3 - LOGIN AND CONFIGURE
+gcloud auth login
+gcloud init
+"Pick configuration to use:
+ [1] Re-initialize this configuration [default] with new settings
+ [2] Create a new configuration"
+Select 1, account: snehalsonawane984@gmail.com
+Select project: my-project-cc-492609
+
+
+STEP 4 - GOOGLE CLOUD CONSOLE - CREATE PROJECT
+1. Go to https://console.cloud.google.com
+2. Click the three lines (=) top left -> Google Cloud Overview -> Dashboard
+3. Click the project dropdown at the top -> New Project
+4. Enter Project Name -> Click Create
+5. Click the Bell icon (notifications) at top right
+6. Click Select Project
+
+
+STEP 5 - ENABLE APP ENGINE ADMIN API
+1. In the search bar type: App Engine Admin API
+2. Click on it -> Click Enable
+
+
+STEP 6 - ACTIVATE CLOUD SHELL
+1. Click the Cloud Shell icon (>_) at top right
+2. Cloud Shell terminal opens at the bottom
+
+
+STEP 7 - GITHUB SETUP
+Go to https://github.com
+Username: abcd12526
+Create repo: AppEngine
+Create file.py with code: print('hello')
+Copy clone URL: https://github.com/abcd12526/AppEngine.git
+
+
+STEP 8 - CLOUD SHELL COMMANDS
+rm -rf AppEngine
+git clone https://github.com/abcd12526/AppEngine.git
+cd AppEngine
+python file.py
+Output: hello

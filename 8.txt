@@ -1,0 +1,107 @@
+08 - Salesforce Cloud: Library App
+
+STEP 1 - CREATE BOOK OBJECT
+Setup -> Object Manager -> Create -> Custom Object
+Label: Book | Plural: Books
+Record Name: Book Name | Type: Text
+Click Save
+
+Optional Features
+>Allow Reports
+>Allow Activities
+>Track Field History
+
+Search Status
+>Allow Search
+
+Add Fields (Fields & Relationships -> New):
+Author       -> Text
+Visible all checkbox
+Genre        -> Picklist (Fiction, Science, History, Technology, Arts)
+Price        -> Currency
+
+
+STEP 2 - CREATE MEMBER OBJECT
+Setup -> Object Manager -> Create -> Custom Object
+Label: Member | Plural: Members
+Record Name: Member ID | Type: Auto Number
+Display Format: MEM-{0000} | Starting Number: 1
+Click Save
+
+Add Fields (Fields & Relationships -> New):
+First Name      -> Text
+Last Name       -> Text
+Email           -> Email
+Phone           -> Phone
+Book Name       -> Master-Detail (Related to: Book)
+
+
+STEP 3 - CREATE BORROW RECORD OBJECT
+Setup -> Object Manager -> Create -> Custom Object
+Label: Borrow Record | Plural: Borrow Records
+Record Name: Borrow ID | Type: Auto Number
+Display Format: BOR-{0000} | Starting Number: 1
+Click Save
+
+Add Fields (Fields & Relationships -> New):
+Member          -> Master-Detail (Related to: Member)
+Book Name       -> Master-Detail (Related to: Book)
+Borrow Date     -> Date
+Return Date     -> Date
+Status          -> Picklist (Borrowed, Returned, Overdue)
+
+STEP 4 - CREATE TABS
+Setup -> Tabs -> Custom Object Tabs -> New
+Select Object (for all 3 make seperate)
+Select Style then next next 
+
+STEP 5 - CREATE LIGHTNING APP
+Setup -> App Manager -> New Lightning App
+Name: Library App
+Navigation Items: add Books, Members, Borrow Records
+User Profiles: add System Administrator
+Click Save & Finish
+
+
+STEP 6 - TEST THE APP
+App Launcher (9 dots) -> Library App
+
+1. Books -> New
+   Name: The Alchemist | Author: Paulo Coelho
+   Genre: Fiction | Price: 500 -> Save
+
+2. Members -> New
+   First Name: John | Last Name: Doe
+   Email: john@test.com | Phone: 9999999999
+   Select Book -> Save
+
+3. Borrow Records -> New
+   Select Member and Book
+   Borrow Date: today
+   Return Date: next week
+   Status: Borrowed -> Save
+
+App Created before : College (search from App Launcher)
+
+BOOK ------
+|	   |
+MEMBER   BORROW
+|
+BORROW
+
+
+------------------------------------------------------------------
+
+Master-Detail Relationship
+Strong connection between two objects
+Child record depends on Parent record
+If Parent is deleted, Child is also deleted
+Example: Order → Order Items
+
+
+Lookup Relationship
+Loose connection between two objects
+Child can exist without Parent
+If Parent is deleted, Child remains
+Example: Customer → Referral Partner
+

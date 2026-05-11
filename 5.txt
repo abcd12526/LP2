@@ -1,0 +1,47 @@
+import java.util.Scanner;
+
+public class Chatbot{
+	public static void main(String[] args){
+		Scanner sc = new Scanner(System.in);
+		String User;
+
+		System.out.println("Welcome to Customer Support Chatbot");
+		System.out.println("Type 'exit' to end chat\n");
+
+        while(true){
+            System.out.print("User: ");
+            User = sc.nextLine().toLowerCase();
+            
+            if(User.equals("exit")){
+                System.out.println("Chatbot: Thank You! Have a great day!");
+                break;
+            }
+            
+            else if(User.equals("hi")||User.equals("hello")){
+                System.out.println("Chatbot: Hi! How can I help you?");
+            }
+            else if(User.contains("product")){
+                System.out.println("Chatbot: We sell a variety of products including electronics, furniture, accessories");
+            }
+            else if(User.contains("price")){
+                System.out.println("Chatbot: Prices vary according to the product");
+            }
+            else if(User.contains("order")){
+                System.out.println("Chatbot: You can place your order on our website");
+            }
+            else if(User.contains("delivery")){
+                System.out.println("Chatbot: Delivery takes approximately 3-4 days");
+            }
+            else if(User.contains("refund")){
+                System.out.println("Chatbot: You will recieve your refund within 5-6 business days");
+            }
+            else if(User.contains("contact")){
+                System.out.println("Chatbot: You can reach out to us via customersupport@gmail.com");
+            }
+            else{
+                System.out.println("Chatbot: Sorry I didnt  understand. Can you rephrase?");
+            }
+        }
+        sc.close();
+	}
+}

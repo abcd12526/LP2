@@ -1,0 +1,73 @@
+07 - Creating an Application in Salesforce using Apex
+
+
+STEP 1 - LOGIN SALESFORCE
+
+
+STEP 2 - OPEN DEVELOPER CONSOLE
+Click gear icon (top right) -> Developer Console
+If classes already created open-> classes: Student, StudentManager, trigger: Student
+
+
+STEP 3 - CREATE APEX CLASS
+File -> New -> Apex Class -> Name: StudentManager
+
+public class StudentManager {
+    public static void createStudent(String name, String email) {
+        Contact s = new Contact();
+        s.FirstName = name;
+        s.Email = email;
+        s.LastName = 'Student';
+        insert s;
+        System.debug('Student Created: ' + name);
+    }
+    public static List<Contact> getAllStudents() {
+        return [SELECT Id, FirstName, Email FROM Contact LIMIT 10];
+    }
+}
+
+File -> Save (Ctrl+S)
+
+
+STEP 4 - EXECUTE CODE
+Debug -> Open Execute Anonymous Window
+Paste and click Execute:
+
+Student.createStudent('Alice', 'alice@test.com');
+List<Contact> students = Student.getAllStudents();
+System.debug(students);
+
+Check output in Debug Log panel below.
+
+
+STEP 5 - CREATE APEX TRIGGER
+File -> New -> Apex Trigger -> Name: StudentTrigger -> sObject: Contact
+
+trigger StudentTrigger on Contact (before insert) {
+    for (Contact c : Trigger.new) {
+        if (c.Email == null)
+            c.Email = 'noemail@default.com';
+    }
+}
+
+Save the trigger.
+
+
+STEP 6 - CREATE TEST CLASS
+File -> New -> Apex Class -> Name: StudentManagerTest
+
+@isTest
+public class StudentManagerTest {
+    @isTest static void testCreate() {
+        Student.createStudent('Bob', 'bob@test.com');
+        List<Contact> result = Student.getAllStudents();
+        System.assertEquals(1, result.size());
+    }
+}
+
+Test -> Run All -> verify all tests pass (green)
+
+
+STEP 7 - VERIFY RECORDS
+App Launcher (9 dots) -> Search Contacts
+Check records created by Apex code are visible
