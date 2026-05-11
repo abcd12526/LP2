@@ -86,3 +86,64 @@ public class Greedy {
         jobScheduling(jobs);
     }
 }
+
+/*
+Dijkstra -> total distance from source matters
+Prim     -> just the single edge weight matters
+
+kruskals
+Sort all edges by weight — [2-3(2), 0-1(4), 1-3(7), 0-2(8), 1-2(8), 2-4(9), 3-4(9)]
+Pick cheapest edge — if it doesn't form a cycle, add it to MST. find() checks if two nodes already belong to same component.
+Reject if cycle — 2-3(2) accepted, 0-1(4) accepted... if both nodes already connected, skip that edge.
+Stop when all nodes connected — final MST has exactly n-1 edges.
+
+Job Scheduling:
+static void jobScheduling(int[][] jobs)
+Defines a method named jobScheduling that takes a 2D array called jobs as input.
+Each job likely contains values like job id, profit, and deadline.
+
+Arrays.sort(jobs, (a,b) -> b[1]-a[1]);
+Sorts the jobs array in descending order based on profit (index 1).
+So highest profit jobs come first.
+
+int[] slots = new int[jobs.length];
+Creates an array slots to store scheduled job IDs.
+Size is equal to number of jobs.
+
+boolean[] used = new boolean[jobs.length];
+Creates a boolean array to track which time slots are already occupied.
+Initially all values are false.
+
+Arrays.fill(slots, -1);
+Fills the slots array with -1.
+-1 means empty slot.
+
+for (int[] j : jobs)
+Loops through each job in the sorted jobs array.
+
+for (int s = Math.min(jobs.length, j[2]) - 1; s >= 0; s--)
+
+Tries to place the job in the latest possible free slot before its deadline.
+j[2] is assumed to be the deadline.
+Starts from minimum of deadline or max slots, then moves backward.
+
+if (!used[s])
+Checks if slot s is free (not used).
+
+used[s] = true;
+Marks the slot as occupied.
+
+slots[s] = j[0];
+Stores the job ID (j[0]) in that slot.
+
+for (int s : slots)
+Iterates through all slots.
+
+if (s != -1) System.out.print("J" + s + " ");
+Prints only filled slots as jobs (J1, J2, etc.).
+
+System.out.println();
+Moves to next line after printing final schedule.
+
+*/
+
