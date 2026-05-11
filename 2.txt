@@ -111,76 +111,208 @@ public class Main {
     }
 }
 
-/*import java.util.*;
+/*import java.util.*; 
+// Imports utility classes like ArrayList, HashMap, HashSet,
+// PriorityQueue, Comparator, Arrays, Collections etc.
+
 public class Main {
+
     static int[][] G={{1,2,3},{4,5,6},{7,8,0}};
+    // Goal state of the 8-puzzle.
+    // 0 represents the blank tile.
 
     static int h(int[][] b){
+        // Heuristic function using Manhattan Distance.
+        // Calculates how far each tile is from its correct position.
+
         int d=0;
-        for(int i=0;i<3;i++) for(int j=0;j<3;j++) //through row and coloumns
-            if(b[i][j]!=0){
-                int v=b[i][j]-1;
-                d+=Math.abs(i-v/3)+Math.abs(j-v%3); //Manhattan distance
-            }
+        // Stores total Manhattan distance.
+
+        for(int i=0;i<3;i++) 
+        // Loop through rows.
+
+            for(int j=0;j<3;j++)
+            // Loop through columns.
+
+                if(b[i][j]!=0){
+                // Ignore blank tile (0).
+
+                    int v=b[i][j]-1;
+                    // Converts tile value into goal index.
+                    // Example:
+                    // tile 1 -> index 0
+                    // tile 5 -> index 4
+
+                    d+=Math.abs(i-v/3)+Math.abs(j-v%3);
+                    // Manhattan Distance formula:
+                    // |currentRow-goalRow| + |currentCol-goalCol|
+                }
+
         return d;
+        // Return total heuristic value.
     }
 
-    static String k(int[][] a){ return Arrays.deepToString(a); }
+    static String k(int[][] a){ 
+        return Arrays.deepToString(a); 
+    }
+    // Converts 2D array into string.
+    // Used for storing states in HashMap and HashSet.
 
-    static List<int[][]> moves(int[][] b){  //Generate possible next states
+    static List<int[][]> moves(int[][] b){
+        // Generates all possible next states.
+
         List<int[][]> L=new ArrayList<>();
+        // Stores all valid next boards.
+
         int x=0,y=0;
-        for(int i=0;i<3;i++) for(int j=0;j<3;j++) if(b[i][j]==0){x=i;y=j;}
+        // Stores blank tile position.
+
+        for(int i=0;i<3;i++) 
+            for(int j=0;j<3;j++) 
+                if(b[i][j]==0){
+                    x=i;
+                    y=j;
+                }
+        // Finds blank tile position.
+
         int[][] D={{1,0},{-1,0},{0,1},{0,-1}};
+        // Possible directions:
+        // Down, Up, Right, Left
+
         for(int[] t:D){
+
             int nx=x+t[0], ny=y+t[1];
+            // New position after movement.
+
             if(nx>=0&&ny>=0&&nx<3&&ny<3){
+            // Checks if move is inside board boundary.
+
                 int[][] c=new int[3][3];
-                for(int i=0;i<3;i++) for(int j=0;j<3;j++) c[i][j]=b[i][j];
-                c[x][y]=c[nx][ny]; c[nx][ny]=0;
+                // Creates copy of board.
+
+                for(int i=0;i<3;i++) 
+                    for(int j=0;j<3;j++) 
+                        c[i][j]=b[i][j];
+                // Copy original board into new board.
+
+                c[x][y]=c[nx][ny];
+                // Move tile into blank position.
+
+                c[nx][ny]=0;
+                // Move blank tile.
+
                 L.add(c);
+                // Add new state into list.
             }
         }
+
         return L;
+        // Return all possible next states.
     }
 
     public static void main(String[] a){
+
         int[][] S={{1,2,3},{4,0,6},{7,5,8}};
-        PriorityQueue<int[][]> pq=new PriorityQueue<>(Comparator.comparingInt(Main::h));
+        // Initial puzzle state.
+
+        PriorityQueue<int[][]> pq=
+            new PriorityQueue<>(Comparator.comparingInt(Main::h));
+        // Priority Queue stores states.
+        // State with lowest heuristic value is removed first.
+
         Map<String,int[][]> P=new HashMap<>();
+        // Parent map.
+        // Stores parent of each state.
+
         Set<String> V=new HashSet<>();
-        pq.add(S); P.put(k(S), null);
+        // Visited set.
+        // Prevents revisiting same states.
+
+        pq.add(S);
+        // Add starting state into queue.
+
+        P.put(k(S), null);
+        // Start state has no parent.
+
         while(!pq.isEmpty()){
+        // Continue until queue becomes empty.
+
             int[][] cur=pq.poll();
+            // Remove best state from queue.
+
             if(k(cur).equals(k(G))){
+            // Goal state reached.
+
                 List<int[][]> path=new ArrayList<>();
-                while(cur!=null){ path.add(cur); cur=P.get(k(cur)); }
+                // Stores final solution path.
+
+                while(cur!=null){
+
+                    path.add(cur);
+                    // Add current state into path.
+
+                    cur=P.get(k(cur));
+                    // Move to parent state.
+                }
+
                 Collections.reverse(path);
-                for(int[][] s:path){ for(int[] r:s){ for(int v:r) System.out.print(v+" "); System.out.println(); } System.out.println(); }
+                // Reverse path to get start -> goal order.
+
+                for(int[][] s:path){
+
+                    for(int[] r:s){
+
+                        for(int v:r) 
+                            System.out.print(v+" ");
+                        // Print each value.
+
+                        System.out.println();
+                    }
+
+                    System.out.println();
+                    // Space between states.
+                }
+
                 return;
+                // Stop program after solution found.
             }
+
             V.add(k(cur));
-            for(int[][] nx:moves(cur)) if(!V.contains(k(nx))){ P.put(k(nx),cur); pq.add(nx); }
+            // Mark current state as visited.
+
+            for(int[][] nx:moves(cur))
+            // Generate all next possible states.
+
+                if(!V.contains(k(nx))){
+                // If state not visited.
+
+                    P.put(k(nx),cur);
+                    // Store parent of next state.
+
+                    pq.add(nx);
+                    // Add next state into queue.
+                }
         }
     }
 }
 
-static int[][] G – defines the goal state of the 8-puzzle where tiles are arranged in correct order and 0 represents the blank tile
-static int h(int[][] b) – heuristic function that calculates Manhattan distance for all tiles from their correct positions and returns total distance used to guide search
-static String k(int[][] a) – converts the 2D board into a string format so it can be stored and compared in HashMap and HashSet
-static List<int[][]> moves(int[][] b) – finds position of blank tile and generates all possible next states by moving blank up, down, left, and right if valid, then returns list of new boards
-public static void main(String[] a) – contains main logic of A* search algorithm starting from initial state and finding path to goal state
-PriorityQueue pq – stores all states and always removes the state with lowest heuristic value first for exploration
-Map P – stores parent of each state so the final solution path can be reconstructed after reaching goal
-Set V – stores visited states to avoid processing the same board again
-pq.add(S) – inserts starting state into priority queue
-P.put(k(S), null) – marks starting state with no parent
-while loop – runs until all possible states are checked or goal is found
-pq.poll() – removes current best state from queue based on heuristic value
-if goal check – compares current state with goal state and stops search if match found
-path reconstruction loop – traces back from goal to start using parent map to build solution path
-moves(cur) loop – generates all next possible states from current state
-if not visited check – ensures only new states are added to queue to avoid repetition
+PROGRAM SUMMARY
+
+1. Solves the 8-puzzle problem using A* Search Algorithm.
+
+2. Uses Manhattan Distance as heuristic.
+
+3. Priority Queue always selects best state first.
+
+4. Generates next states by moving blank tile.
+
+5. HashSet prevents revisiting same states.
+
+6. HashMap stores parent states for path reconstruction.
+
+7. When goal state is found:
+   - Path is reconstructed
+   - All states are printed from start to goal
 
 * The program solves the 8-puzzle problem using A* search algorithm
 * It starts from an initial state and tries to reach the goal state
